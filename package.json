@@ -9,9 +9,10 @@
     "preview": "vite preview",
     "test": "vitest"
   },
-  "devDependencies": {
+  "dependencies": {
     "vite": "^5.0.0",
     "vitest": "^1.0.0",
     "jsdom": "^23.0.0"
-  }
+  },
+  "devDependencies": {}
 }
