@@ -18,63 +18,87 @@
     <div id="app">
       <header>
         <h1>EcoTrack</h1>
-        <p>Your journey to a sustainable future starts here.</p>
+        <p>Expert Carbon Footprint Tracking & Reduction Roadmap</p>
       </header>
+
       <main>
-        <section id="calculator" aria-labelledby="calc-title">
-          <h2 id="calc-title" class="sr-only">Footprint Calculator</h2>
-          <div class="glass-card">
-            <form id="footprint-form" aria-label="Carbon footprint estimation form">
-              <div class="form-group">
-                <label for="transportType">Transport Method</label>
-                <select id="transportType" required aria-required="true">
-                  <option value="car">Car (Fuel)</option>
-                  <option value="bus">Public Bus</option>
-                  <option value="train">Train / Metro</option>
-                  <option value="flight">Air Travel</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="transportDistance">Weekly Distance (km)</label>
-                <div class="input-with-button">
-                  <input type="number" id="transportDistance" min="0" value="50" required aria-required="true">
-                  <button type="button" id="estimate-distance-btn" class="secondary-btn">Estimate via Google Maps</button>
+        <div class="dashboard-grid">
+          <!-- Main Calculator -->
+          <section id="calculator" aria-labelledby="calc-title">
+            <h2 id="calc-title" class="sr-only">Footprint Calculator</h2>
+            <div class="glass-card">
+              <form id="footprint-form" aria-label="Carbon footprint estimation form">
+                <div class="form-group">
+                  <label for="transportType">Transport Method</label>
+                  <select id="transportType" name="transportType" required aria-required="true">
+                    <option value="car">Personal Car (Petrol/Diesel)</option>
+                    <option value="ev">Electric Vehicle (EV)</option>
+                    <option value="bus">Public Bus</option>
+                    <option value="train">Train / Metro</option>
+                    <option value="flight">Air Travel</option>
+                  </select>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <label for="energyType">Home Energy Source</label>
-                <select id="energyType" required aria-required="true">
-                  <option value="electricity">Electricity (Grid)</option>
-                  <option value="gas">Natural Gas</option>
-                </select>
-              </div>
+                <div class="form-group">
+                  <label for="transportDistance">Weekly Distance (km)</label>
+                  <div class="input-with-button">
+                    <input type="number" id="transportDistance" name="transportDistance" min="0" value="50" required aria-required="true">
+                    <button type="button" id="estimate-distance-btn" class="secondary-btn">Estimate with AI</button>
+                  </div>
+                </div>
 
-              <div class="form-group">
-                <label for="energyUsage">Weekly Usage (kWh)</label>
-                <input type="number" id="energyUsage" min="0" value="100" required aria-required="true">
-              </div>
+                <div class="form-group">
+                  <label for="energyType">Home Energy Source</label>
+                  <select id="energyType" name="energyType" required aria-required="true">
+                    <option value="electricity">Grid Electricity</option>
+                    <option value="gas">Natural Gas</option>
+                    <option value="solar">Solar / Renewable</option>
+                  </select>
+                </div>
 
-              <div class="form-group">
-                <label for="dietType">Dietary Style</label>
-                <select id="dietType" required aria-required="true">
-                  <option value="meat">Omnivore / Meat</option>
-                  <option value="vegetarian">Vegetarian</option>
-                  <option value="vegan">Vegan</option>
-                </select>
-              </div>
+                <div class="form-group">
+                  <label for="energyUsage">Weekly Usage (kWh)</label>
+                  <input type="number" id="energyUsage" name="energyUsage" min="0" value="100" required aria-required="true">
+                </div>
 
-              <button type="submit" id="calculate-btn">Calculate Footprint</button>
-            </form>
+                <div class="form-group">
+                  <label for="dietType">Dietary Style</label>
+                  <select id="dietType" name="dietType" required aria-required="true">
+                    <option value="meat">Meat Eater</option>
+                    <option value="pescatarian">Pescatarian</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="vegan">Vegan</option>
+                  </select>
+                </div>
 
-            <div id="results" class="result-section" aria-live="polite">
-              <h3>Your Annual Impact</h3>
-              <span id="total-score">0.00</span>
-              <p>kg CO2 / year</p>
-              <div id="insights" class="insights-container"></div>
+                <button type="submit" id="calculate-btn">Generate Reduction Roadmap</button>
+              </form>
             </div>
-          </div>
+          </section>
+
+          <!-- Side Dashboard: History & Stats -->
+          <aside class="dashboard-sidebar">
+            <div class="glass-card mini">
+              <h3>Latest Impact</h3>
+              <div id="latest-score-container">
+                <span id="total-score">0.00</span>
+                <span class="unit">kg CO2e / yr</span>
+              </div>
+            </div>
+
+            <div class="glass-card mini history-section">
+              <h3>Recent History</h3>
+              <div id="history-list" class="history-list">
+                <p class="empty-state">No calculations yet. Start tracking today!</p>
+              </div>
+              <button id="clear-history" class="text-btn">Clear History</button>
+            </div>
+          </aside>
+        </div>
+
+        <section id="results" class="result-section" aria-live="polite">
+          <h2>Your Reduction Roadmap</h2>
+          <div id="insights" class="insights-grid"></div>
         </section>
       </main>
     </div>
