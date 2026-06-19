@@ -2,105 +2,324 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Security: CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:;" />
-    <title>EcoTrack | Carbon Footprint Awareness</title>
-    <meta name="description" content="Track and reduce your carbon footprint with EcoTrack. Secure, accessible, and premium footprint tracker." />
+    <!-- Security: Strict Content-Security-Policy -->
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+               font-src https://fonts.gstatic.com;
+               script-src 'self';
+               img-src 'self' data:;
+               connect-src 'none';" />
+    <!-- SEO -->
+    <title>EcoTrack | Carbon Footprint Awareness Platform</title>
+    <meta name="description" content="Track, understand, and reduce your personal carbon footprint with EcoTrack. Get a detailed breakdown of your CO2 impact covering transport, energy, diet, and waste — with an actionable reduction roadmap." />
+    <meta name="keywords" content="carbon footprint, CO2 calculator, sustainability, climate, EcoTrack, emissions tracker" />
+    <link rel="canonical" href="https://ecotrack.app/" />
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <div id="app">
-      <header>
-        <h1>EcoTrack</h1>
-        <p>Expert Carbon Footprint Tracking & Reduction Roadmap</p>
+
+      <header role="banner">
+        <div class="header-inner">
+          <div class="logo-area">
+            <span class="logo-icon" aria-hidden="true">🌿</span>
+            <h1 id="site-title">EcoTrack</h1>
+          </div>
+          <p class="tagline">Personal Carbon Footprint Tracker &amp; Reduction Roadmap</p>
+        </div>
       </header>
 
-      <main>
+      <main id="main-content">
+
+        <!-- Skip link for keyboard users -->
+        <a href="#footprint-form" class="skip-link">Skip to calculator</a>
+
+        <!-- Educational Banner -->
+        <aside class="did-you-know" aria-label="Did You Know">
+          <p id="eco-fact" role="status" aria-live="polite">
+            💡 <strong>Did you know?</strong> The average global carbon footprint is <strong>4.8 tonnes CO₂e per year</strong> — the Paris Agreement target is 2.3 tonnes.
+          </p>
+        </aside>
+
         <div class="dashboard-grid">
+
           <!-- Main Calculator -->
           <section id="calculator" aria-labelledby="calc-title">
-            <h2 id="calc-title" class="sr-only">Footprint Calculator</h2>
+            <h2 id="calc-title">Carbon Footprint Calculator</h2>
             <div class="glass-card">
-              <form id="footprint-form" aria-label="Carbon footprint estimation form">
-                <div class="form-group">
-                  <label for="transportType">Transport Method</label>
-                  <select id="transportType" name="transportType" required aria-required="true">
-                    <option value="car">Personal Car (Petrol/Diesel)</option>
-                    <option value="ev">Electric Vehicle (EV)</option>
-                    <option value="bus">Public Bus</option>
-                    <option value="train">Train / Metro</option>
-                    <option value="flight">Air Travel</option>
-                  </select>
-                </div>
+              <form
+                id="footprint-form"
+                aria-label="Carbon footprint estimation form"
+                novalidate
+              >
 
-                <div class="form-group">
-                  <label for="transportDistance">Weekly Distance (km)</label>
-                  <div class="input-with-button">
-                    <input type="number" id="transportDistance" name="transportDistance" min="0" value="50" required aria-required="true">
-                    <button type="button" id="estimate-distance-btn" class="secondary-btn">Estimate with AI</button>
+                <!-- Transport -->
+                <fieldset class="form-fieldset">
+                  <legend>Transport</legend>
+
+                  <div class="form-group">
+                    <label for="transportType">Transport Method</label>
+                    <select
+                      id="transportType"
+                      name="transportType"
+                      required
+                      aria-required="true"
+                      aria-describedby="transportType-desc"
+                    >
+                      <option value="car">Personal Car (Petrol/Diesel)</option>
+                      <option value="ev">Electric Vehicle (EV)</option>
+                      <option value="motorcycle">Motorcycle / Scooter</option>
+                      <option value="bus">Public Bus</option>
+                      <option value="train">Train / Metro</option>
+                      <option value="flight">Air Travel</option>
+                      <option value="bicycle">Bicycle (Zero Emissions)</option>
+                    </select>
+                    <span id="transportType-desc" class="sr-only">
+                      Select your primary weekly transport mode.
+                    </span>
                   </div>
-                </div>
 
-                <div class="form-group">
-                  <label for="energyType">Home Energy Source</label>
-                  <select id="energyType" name="energyType" required aria-required="true">
-                    <option value="electricity">Grid Electricity</option>
-                    <option value="gas">Natural Gas</option>
-                    <option value="solar">Solar / Renewable</option>
-                  </select>
-                </div>
+                  <div class="form-group">
+                    <label for="transportDistance">Weekly Distance (km)</label>
+                    <div class="input-with-button">
+                      <input
+                        type="number"
+                        id="transportDistance"
+                        name="transportDistance"
+                        min="0"
+                        max="10000"
+                        step="1"
+                        value="50"
+                        required
+                        aria-required="true"
+                        aria-describedby="transportDistance-desc"
+                      />
+                      <button
+                        type="button"
+                        id="estimate-distance-btn"
+                        class="secondary-btn"
+                        aria-label="Estimate weekly commute distance using AI"
+                      >Estimate with AI</button>
+                    </div>
+                    <span id="transportDistance-desc" class="sr-only">
+                      Enter your average weekly travel distance in kilometres. Use the AI button to auto-estimate a typical commute.
+                    </span>
+                  </div>
+                </fieldset>
 
-                <div class="form-group">
-                  <label for="energyUsage">Weekly Usage (kWh)</label>
-                  <input type="number" id="energyUsage" name="energyUsage" min="0" value="100" required aria-required="true">
-                </div>
+                <!-- Energy -->
+                <fieldset class="form-fieldset">
+                  <legend>Home Energy</legend>
 
-                <div class="form-group">
-                  <label for="dietType">Dietary Style</label>
-                  <select id="dietType" name="dietType" required aria-required="true">
-                    <option value="meat">Meat Eater</option>
-                    <option value="pescatarian">Pescatarian</option>
-                    <option value="vegetarian">Vegetarian</option>
-                    <option value="vegan">Vegan</option>
-                  </select>
-                </div>
+                  <div class="form-group">
+                    <label for="energyType">Primary Energy Source</label>
+                    <select
+                      id="energyType"
+                      name="energyType"
+                      required
+                      aria-required="true"
+                      aria-describedby="energyType-desc"
+                    >
+                      <option value="electricity">Grid Electricity</option>
+                      <option value="gas">Natural Gas</option>
+                      <option value="oil">Heating Oil</option>
+                      <option value="solar">Solar / Renewable</option>
+                    </select>
+                    <span id="energyType-desc" class="sr-only">
+                      Select your home's primary heating and power energy source.
+                    </span>
+                  </div>
 
-                <button type="submit" id="calculate-btn">Generate Reduction Roadmap</button>
+                  <div class="form-group">
+                    <label for="energyUsage">Weekly Usage (kWh)</label>
+                    <input
+                      type="number"
+                      id="energyUsage"
+                      name="energyUsage"
+                      min="0"
+                      max="5000"
+                      step="1"
+                      value="100"
+                      required
+                      aria-required="true"
+                      aria-describedby="energyUsage-desc"
+                    />
+                    <span id="energyUsage-desc" class="sr-only">
+                      Enter your weekly home energy consumption in kilowatt-hours. Check your utility bill for this figure.
+                    </span>
+                  </div>
+                </fieldset>
+
+                <!-- Diet -->
+                <fieldset class="form-fieldset">
+                  <legend>Diet</legend>
+
+                  <div class="form-group">
+                    <label for="dietType">Dietary Style</label>
+                    <select
+                      id="dietType"
+                      name="dietType"
+                      required
+                      aria-required="true"
+                      aria-describedby="dietType-desc"
+                    >
+                      <option value="meat">Meat Eater (Daily)</option>
+                      <option value="pescatarian">Pescatarian</option>
+                      <option value="vegetarian">Vegetarian</option>
+                      <option value="vegan">Vegan</option>
+                    </select>
+                    <span id="dietType-desc" class="sr-only">
+                      Select the dietary style that best describes your typical eating habits.
+                    </span>
+                  </div>
+                </fieldset>
+
+                <!-- Waste -->
+                <fieldset class="form-fieldset">
+                  <legend>Waste Management</legend>
+
+                  <div class="form-group">
+                    <label for="wasteType">Waste Disposal Method</label>
+                    <select
+                      id="wasteType"
+                      name="wasteType"
+                      required
+                      aria-required="true"
+                      aria-describedby="wasteType-desc"
+                    >
+                      <option value="landfill">Mostly Landfill</option>
+                      <option value="recycling">Recycling</option>
+                      <option value="composting">Composting</option>
+                    </select>
+                    <span id="wasteType-desc" class="sr-only">
+                      Select how most of your household waste is disposed of each week.
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="weeklyWaste">Weekly Waste (kg)</label>
+                    <input
+                      type="number"
+                      id="weeklyWaste"
+                      name="weeklyWaste"
+                      min="0"
+                      max="500"
+                      step="0.5"
+                      value="5"
+                      required
+                      aria-required="true"
+                      aria-describedby="weeklyWaste-desc"
+                    />
+                    <span id="weeklyWaste-desc" class="sr-only">
+                      Estimate how many kilograms of waste your household produces each week.
+                    </span>
+                  </div>
+                </fieldset>
+
+                <!-- Lifestyle -->
+                <fieldset class="form-fieldset">
+                  <legend>Lifestyle &amp; Consumption</legend>
+
+                  <div class="form-group">
+                    <label for="lifestyleLevel">Shopping &amp; Leisure Habits</label>
+                    <select
+                      id="lifestyleLevel"
+                      name="lifestyleLevel"
+                      required
+                      aria-required="true"
+                      aria-describedby="lifestyleLevel-desc"
+                    >
+                      <option value="highConsumer">High Consumer (Frequent travel, gadgets, fast fashion)</option>
+                      <option value="average" selected>Average Consumer</option>
+                      <option value="minimal">Minimal Consumer (Second-hand, low waste)</option>
+                    </select>
+                    <span id="lifestyleLevel-desc" class="sr-only">
+                      Select the option that best describes your general shopping and leisure consumption habits.
+                    </span>
+                  </div>
+                </fieldset>
+
+                <button type="submit" id="calculate-btn" aria-describedby="calc-btn-desc">
+                  Generate My Reduction Roadmap
+                </button>
+                <span id="calc-btn-desc" class="sr-only">
+                  Submit all inputs to calculate your annual carbon footprint and receive a personalised reduction plan.
+                </span>
               </form>
             </div>
           </section>
 
           <!-- Side Dashboard: History & Stats -->
-          <aside class="dashboard-sidebar">
-            <div class="glass-card mini">
-              <h3>Latest Impact</h3>
-              <div id="latest-score-container">
-                <span id="total-score">0.00</span>
-                <span class="unit">kg CO2e / yr</span>
+          <aside class="dashboard-sidebar" aria-label="Dashboard sidebar">
+
+            <div class="glass-card mini" role="region" aria-labelledby="latest-score-title">
+              <h3 id="latest-score-title">Latest Impact</h3>
+              <div id="latest-score-container" aria-live="polite" aria-atomic="true">
+                <span id="total-score" aria-label="Total annual footprint">0.00</span>
+                <span class="unit">kg CO₂e / yr</span>
               </div>
             </div>
 
-            <div class="glass-card mini history-section">
-              <h3>Recent History</h3>
-              <div id="history-list" class="history-list">
+            <!-- Benchmark Chart -->
+            <div
+              class="glass-card mini"
+              id="benchmark-card"
+              role="region"
+              aria-labelledby="benchmark-title"
+              style="display:none"
+            >
+              <h3 id="benchmark-title">vs Global Benchmarks</h3>
+              <div
+                id="benchmark-chart"
+                class="benchmark-chart"
+                aria-label="Bar chart comparing your footprint to global average and Paris Agreement target"
+              ></div>
+            </div>
+
+            <!-- History -->
+            <div class="glass-card mini history-section" role="region" aria-labelledby="history-title">
+              <h3 id="history-title">Calculation History</h3>
+              <div
+                id="history-list"
+                class="history-list"
+                role="list"
+                aria-label="Previous carbon footprint calculations"
+              >
                 <p class="empty-state">No calculations yet. Start tracking today!</p>
               </div>
-              <button id="clear-history" class="text-btn">Clear History</button>
+              <button id="clear-history" class="text-btn" aria-label="Clear all calculation history">
+                Clear History
+              </button>
             </div>
+
           </aside>
         </div>
 
-        <section id="results" class="result-section" aria-live="polite">
-          <h2>Your Reduction Roadmap</h2>
-          <div id="insights" class="insights-grid"></div>
+        <!-- Results: Reduction Roadmap -->
+        <section
+          id="results"
+          class="result-section"
+          aria-live="polite"
+          aria-atomic="true"
+          aria-labelledby="roadmap-title"
+          tabindex="-1"
+        >
+          <h2 id="roadmap-title">🗺️ Your Personalised Reduction Roadmap</h2>
+          <div id="breakdown-chart" class="breakdown-chart" role="img" aria-label="Breakdown of carbon footprint by category"></div>
+          <div id="insights" class="insights-grid" role="list" aria-label="Personalised reduction insights"></div>
         </section>
+
       </main>
+
+      <footer role="contentinfo">
+        <p>Built with ❤️ for a sustainable future &mdash; EcoTrack uses EPA &amp; IPCC-based emission factors.</p>
+      </footer>
     </div>
     <script type="module" src="/main.js"></script>
   </body>
