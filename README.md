@@ -1,61 +1,71 @@
-# EcoTrack | Carbon Footprint Awareness Platform
+# EcoTrack
 
-EcoTrack is a high-impact, premium web application designed to help individuals understand, track, and reduce their carbon footprint through data-driven insights and interactive features.
+A browser-based carbon-footprint calculator. It collects transport, energy, and
+diet choices, estimates an annual total, stores the last ten calculations in
+`localStorage`, and renders rule-based reduction suggestions.
 
-## 🌟 Key Features
+## Calculation model
 
-- **Smart Footprint Calculator**: Precisely estimates annual CO2 impact across Transport, Home Energy, and Diet.
-- **Google Services Integration**: Utilizes Google Maps API patterns for accurate weekly distance estimation.
-- **Personalized Insights**: Generates actionable, tailored advice based on the calculated footprint.
-- **Premium UX**: Features a modern glassmorphism design with smooth animations and dark mode.
-- **Data Persistence**: Uses LocalStorage to securely save user inputs and progress.
+`calculator.js` is the source of truth. Transport and energy inputs are treated
+as weekly quantities and multiplied by 52; diet factors are daily quantities
+multiplied by 365. The bundled factors are illustrative kg CO2e averages:
 
-## 🛠️ Technical Excellence (Evaluation Focus)
+| Category | Options |
+|---|---|
+| Transport | car, bus, train, flight, ev |
+| Energy | electricity, gas, solar |
+| Diet | meat, vegetarian, vegan, pescatarian |
 
-### 1. Code Quality & Structure
-- **Modular Architecture**: Separate modules for logic (`calculator.js`), UI interactions (`main.js`), and external services (`googleServices.js`).
-- **Clean Code**: Adheres to modern ES6+ standards with clear documentation and consistent naming conventions.
+The result is rounded to two decimal places. This is an educational estimate,
+not a regulated emissions inventory.
 
-### 2. Security (Addressing Previous 58/100 Score)
-- **Content Security Policy (CSP)**: Strict headers implemented to prevent XSS and unauthorized resource loading.
-- **Input Sanitization**: All user-provided and calculated data are sanitized before rendering to the DOM.
-- **Secure Persistence**: Data is handled locally without exposing sensitive parameters to external trackers.
+## Browser workflow
 
-### 3. Testing (Addressing Previous 0/100 Score)
-- **Unit Testing**: 100% coverage for core calculation logic using **Vitest**.
-- **Edge Case Handling**: Verified correct behavior for zero inputs, invalid data, and high-impact scenarios.
-- **Verification Command**: `npm test`
+1. `main.js` reads the form on submit and validates numeric values with
+   `parseFloat`.
+2. `calculateFootprint()` computes the annual estimate.
+3. The result and a timestamp are prepended to history, capped at ten entries.
+4. History is saved under `ecoTrackHistory` in `localStorage`.
+5. `getPersonalizedInsights()` returns structured cards for transport, energy,
+   and diet choices.
+6. The optional distance button calls `getDistanceWithGoogleMaps('Home',
+   'Office')`; users can enter a distance manually if that service fails.
 
-### 4. Accessibility (Addressing Previous 45/100 Score)
-- **Semantic HTML5**: Native use of `<main>`, `<section>`, `<header>`, and `<form>`.
-- **ARIA Implementation**: Full ARIA labels, `aria-live` regions for dynamic score updates, and `sr-only` descriptions for non-visual context.
-- **Keyboard Navigation**: High-contrast focus states and logical tab flow for all interactive elements.
+## Run and test
 
-### 5. Google Services (Addressing Previous 25/100 Score)
-- **Google Maps Integration**: Implemented a distance estimation service that follows Google's best practices for API consumption and error handling.
-- **Extensibility**: Structure ready for seamless transition to full Google Carbon Footprint API integration.
+```bash
+npm install
+npm run dev       # Vite development server
+npm test          # Vitest in jsdom
+npm run build     # production bundle
+npm run preview   # serve the production bundle
+```
 
-## 🚀 How to Run Locally
+The tests in `calculator.test.js` cover standard, zero, missing-data, and
+insight cases. There is no backend or database.
 
-1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
+## Repository map
 
-2. **Start Dev Server**:
-   ```bash
-   npm run dev
-   ```
+```text
+index.html          # application shell and form
+main.js             # DOM events, history, rendering, localStorage
+calculator.js       # emission factors and pure calculation functions
+googleServices.js   # optional distance lookup integration
+style.css           # presentation
+calculator.test.js  # Vitest unit tests
+vite.config.js      # Vite + jsdom test configuration
+```
 
-3. **Run Tests**:
-   ```bash
-   npm test
-   ```
+## Security and privacy
 
-## 📋 Assumptions & Methodology
-- Emission factors are based on representative industry averages (e.g., EPA/UK Govt GHG factors).
-- Calculations assume a consistent weekly routine extrapolated to an annual impact.
-- Distance estimation mock represents a typical Google Distance Matrix API implementation.
+Inputs and history remain in the browser's local storage; the app has no user
+accounts. The UI escapes dynamic insight text before inserting it into HTML.
+Do not treat `localStorage` as confidential storage. If the Google service is
+enabled, review its implementation and restrict any API key to the intended
+origins before deployment.
 
----
-Built with ❤️ for a sustainable future.
+## Limitations
+
+Emission factors are fixed constants, distance estimation is optional, and the
+application does not verify results against utility, travel, or dietary data.
+No license is declared in `package.json`.
